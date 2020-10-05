@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
-function FormAddUser({onSubmit, _handleChange, name, email}) {
+function FormAddUser({onSubmit, _handleChange, name, email, operation}) {
 
 
 
@@ -31,7 +31,7 @@ function FormAddUser({onSubmit, _handleChange, name, email}) {
                     />
                 </FormGroup>
                 <FormGroup >
-                    <Button disabled={!(name && email)} color="primary">Submit</Button>
+                    <Button disabled={!(name && email)} color="primary">{operation}</Button>
                 </FormGroup>
             </Form>
         </div>

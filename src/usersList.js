@@ -6,19 +6,19 @@ import { Table, Button } from 'reactstrap';
 
  
 
-function UsersList({users, userDelete}) {
+function UsersList({users, userDelete, updateUser}) {
 
     const renderUsers = () => {
         if (users) {
-          return users.map(({id, name, email}) => {
+          return users.map(user => {
             return (
             // <h1 key={user.id}>{user.name}</h1>
-                <tr key={id}>
-                    <td>{id}</td>
-                    <td>{name}</td>
-                    <td>{email}</td>
-                    <td><Button color="primary">Edit</Button></td>
-                    <td><Button onClick={ () => userDelete(id)} color="danger">Delete</Button></td>
+                <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td><Button onClick={() => updateUser(user)} color="primary">Edit</Button></td>
+                    <td><Button onClick={ () => userDelete(user.id)} color="danger">Delete</Button></td>
                 </tr>
             )
           })

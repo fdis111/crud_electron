@@ -49,6 +49,16 @@ ipcMain.on('delete-user', (event, arg) => {
     })
 })
 
+ipcMain.on('update-user', (event, arg) => {
+    db.all(`UPDATE users  SET name = '${arg.name}', email = '${arg.email}'  WHERE id = ${parseInt(arg.id)}`, (err, data) => {
+        if (err) {
+            throw err
+        } else{
+            event.reply('asynchronous-reply', data)
+        }
+    })
+})
+
 
     
 function createWindow() {

@@ -36,6 +36,15 @@ const deleteUser = (userId) => {
 }
 
 
+const updateUser = (user) => {
+  return new Promise(resolve => {
+    ipcRenderer.once('asynchronous-reply', (_, arg) => {
+      resolve(arg);
+    });
+    
+    ipcRenderer.send('update-user', user);
+  })
+}
 
 
 
@@ -44,6 +53,8 @@ function App() {
   const [users, setUsers] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [operation, setOperation] = useState("Save");
+  const [userId, setUserId] = useState(null)
 
 
   const _handleChange = (e) => {
@@ -61,10 +72,20 @@ function App() {
 
 
   const _handleSumit = (e) => {
-    postUser({
-      name, 
-      email
-    })
+    if (operation === "Save") {
+      postUser({
+        name, 
+        email
+      })
+    } else if(operation === "Update"){
+      const user = {
+        name: name,
+        email: email,
+        id: userId
+      }
+      console.log(user);
+      updateUser(user)
+    }
     setName("")
     setEmail("")
     e.preventDefault();
@@ -77,6 +98,13 @@ function App() {
    
   }
 
+  const _handleUpdateUser = (user) => {
+    setName(user.name)
+    setEmail(user.email)
+    setUserId(user.id)
+    setOperation("Update")
+  }
+
   useEffect(() => {
    getUsers().then(data => setUsers(data)) 
   })
@@ -86,8 +114,8 @@ function App() {
   return (
     <div className="container">
       <h1>Liste des utilisateurs</h1>
-      <Form name={name} email={email} _handleChange={_handleChange} onSubmit={_handleSumit} />
-      <UsersList userDelete={_handleDelete} users={users} />
+      <Form operation={operation} name={name} email={email} _handleChange={_handleChange} onSubmit={_handleSumit} />
+      <UsersList userDelete={_handleDelete} updateUser={_handleUpdateUser} users={users} />
     </div>
   );
 }
